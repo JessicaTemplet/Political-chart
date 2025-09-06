@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>US Governance Timeline</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; padding: 40px; }
+  canvas { max-width: 1000px; }
+  #infoBox {
+    margin-top: 20px;
+    padding: 10px;
+    border: 2px solid #333;
+    display: none;
+    width: 400px;
+    background-color: #f9f9f9;
+  }
+</style>
+</head>
+<body>
+
+<h2>US Governance Timeline (1776–2025)</h2>
+<canvas id="timelineChart"></canvas>
+
+<div id="infoBox"></div>
+
+<script>
+const ctx = document.getElementById('timelineChart').getContext('2d');
+
+// Data
+const periods = [
+  { label: "Early Republic", start: 1776, end: 1830, focus: "Elite", party: "Federalist", color: "#FF8C00" },
+  { label: "Jacksonian Era", start: 1829, end: 1837, focus: "Majority", party: "Democratic", color: "#32CD32" },
+  { label: "Progressive Era", start: 1890, end: 1920, focus: "Majority", party: "Republican/Democratic", color: "#32CD32" },
+  { label: "New Deal Era", start: 1933, end: 1945, focus: "Majority", party: "Democratic", color: "#32CD32" },
+  { label: "Postwar Consensus", start: 1945, end: 1970, focus: "Majority", party: "Democratic/Republican", color: "#32CD32" },
+  { label: "Civil Rights / Great Society", start: 1964, end: 1975, focus: "Majority", party: "Democratic", color: "#32CD32" },
+  { label: "Reagan / Modern GOP Era", start: 1980, end: 2008, focus: "Elite", party: "Republican", color: "#FF8C00" },
+  { label: "Obama Era", start: 2009, end: 2016, focus: "Mixed", party: "Democratic", color: "#FFD700" },
+  { label: "Trump / Post-2016", start: 2017, end: 2025, focus: "Elite", party: "Republican", color: "#FF8C00" }
+];
+
+// Prepare chart data
+const datasets = periods.map(p => ({
+  label: `${p.focus} (${p.party})`,
+  backgroundColor: p.color,
+  data: [{x: p.start, x2: p.end, y: p.label}],
+  party: p.party,
+  focus: p.focus
+}));
+
+const config = {
+  type: 'bar',
+  data: { labels: periods.map(p => p.label), datasets },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function(context) {
+            return `${context.dataset.focus}: ${context.raw.x} – ${context.raw.x2}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: { min: 1770, max: 2030, title: { display: true, text: 'Year' } },
+      y: { title: { display: true, text: 'Period' } }
+    },
+    onClick: (evt, elements) => {
+      if(elements.length > 0) {
+        const index = elements[0].datasetIndex;
+        const period = periods[index];
+        const infoBox = document.getElementById('infoBox');
+        infoBox.style.display = 'block';
+        infoBox.innerHTML = `<strong>${period.label}</strong><br>
+                             Governance: ${period.focus}<br>
+                             Controlling Party: ${period.party}<br>
+                             Years: ${period.start}–${period.end}`;
+      }
+    }
+  }
+};
+
+new Chart(ctx, config);
+</script>
+
+</body>
+</html>
