@@ -2,86 +2,299 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive timeline showing majority vs. elite governance patterns in US history from 1776-2025">
+<meta name="keywords" content="US history, governance, politics, timeline, majority rule, elite power, democracy">
+<meta name="author" content="Your Name">
+<meta property="og:title" content="US Governance Timeline: Majority vs. Elite">
+<meta property="og:description" content="Interactive visualization of governance patterns throughout American history">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://yourusername.github.io/us-governance-timeline-chart/preview.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="US Governance Timeline: Majority vs. Elite">
+<meta name="twitter:description" content="Interactive timeline showing governance patterns in US history">
 <title>US Governance Timeline</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
   body { font-family: Arial, sans-serif; padding: 40px; }
-  canvas { max-width: 1000px; }
+  canvas { max-width: 1200px; }
   #infoBox {
     margin-top: 20px;
-    padding: 10px;
+    padding: 15px;
     border: 2px solid #333;
     display: none;
-    width: 400px;
+    width: 500px;
     background-color: #f9f9f9;
+    border-radius: 8px;
+  }
+  .legend {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    max-width: 600px;
+  }
+  .legend-item {
+    display: inline-block;
+    margin-right: 20px;
+    margin-bottom: 5px;
+  }
+  .legend-color {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    vertical-align: middle;
   }
 </style>
 </head>
 <body>
 
-<h2>US Governance Timeline (1776–2025)</h2>
+<h2>US Governance Timeline: Majority vs. Elite Interests (1776–2025)</h2>
 <canvas id="timelineChart"></canvas>
+
+<div class="legend">
+  <h4>Governance Focus Legend:</h4>
+  <div class="legend-item">
+    <span class="legend-color" style="background-color: #32CD32;"></span>
+    <strong>Majority-Focused</strong>
+  </div>
+  <div class="legend-item">
+    <span class="legend-color" style="background-color: #FF8C00;"></span>
+    <strong>Elite-Focused</strong>
+  </div>
+  <div class="legend-item">
+    <span class="legend-color" style="background-color: #FFD700;"></span>
+    <strong>Mixed/Transitional</strong>
+  </div>
+</div>
 
 <div id="infoBox"></div>
 
 <script>
 const ctx = document.getElementById('timelineChart').getContext('2d');
 
-// Data
+// Updated data reflecting the corrected essay
 const periods = [
-  { label: "Early Republic", start: 1776, end: 1830, focus: "Elite", party: "Federalist", color: "#FF8C00" },
-  { label: "Jacksonian Era", start: 1829, end: 1837, focus: "Majority", party: "Democratic", color: "#32CD32" },
-  { label: "Progressive Era", start: 1890, end: 1920, focus: "Majority", party: "Republican/Democratic", color: "#32CD32" },
-  { label: "New Deal Era", start: 1933, end: 1945, focus: "Majority", party: "Democratic", color: "#32CD32" },
-  { label: "Postwar Consensus", start: 1945, end: 1970, focus: "Majority", party: "Democratic/Republican", color: "#32CD32" },
-  { label: "Civil Rights / Great Society", start: 1964, end: 1975, focus: "Majority", party: "Democratic", color: "#32CD32" },
-  { label: "Reagan / Modern GOP Era", start: 1980, end: 2008, focus: "Elite", party: "Republican", color: "#FF8C00" },
-  { label: "Obama Era", start: 2009, end: 2016, focus: "Mixed", party: "Democratic", color: "#FFD700" },
-  { label: "Trump / Post-2016", start: 2017, end: 2025, focus: "Elite", party: "Republican", color: "#FF8C00" }
+  { 
+    label: "Early Republic", 
+    start: 1776, 
+    end: 1830, 
+    focus: "Elite", 
+    party: "Federalist-dominated", 
+    color: "#FF8C00",
+    description: "Power concentrated among wealthy landowners and merchants. Limited suffrage to property-owning white men (~20% of population)."
+  },
+  { 
+    label: "Jacksonian Era", 
+    start: 1829, 
+    end: 1837, 
+    focus: "Majority", 
+    party: "Democratic", 
+    color: "#32CD32",
+    description: "Expanded suffrage to all white men. Opposition to National Bank. Indian Removal Act showed limits of democratic expansion."
+  },
+  { 
+    label: "Gilded Age", 
+    start: 1870, 
+    end: 1890, 
+    focus: "Elite", 
+    party: "Republican-dominated", 
+    color: "#FF8C00",
+    description: "Unprecedented wealth concentration. Railroad barons, steel magnates dominate. Minimal business regulation, frequent strike-breaking."
+  },
+  { 
+    label: "Progressive Era", 
+    start: 1890, 
+    end: 1920, 
+    focus: "Majority", 
+    party: "Bipartisan Reform", 
+    color: "#32CD32",
+    description: "Antitrust laws, workplace protections, direct election of Senators, women's suffrage, federal income tax established."
+  },
+  { 
+    label: "New Deal Era", 
+    start: 1933, 
+    end: 1945, 
+    focus: "Majority", 
+    party: "Democratic", 
+    color: "#32CD32",
+    description: "Social Security, labor protections, public works. Union membership grew from 3M to 14M. Reduced inequality significantly."
+  },
+  { 
+    label: "Postwar Consensus", 
+    start: 1945, 
+    end: 1970, 
+    focus: "Majority", 
+    party: "Bipartisan", 
+    color: "#32CD32",
+    description: "GI Bill, Interstate Highways, high taxes on wealthy (91% top rate). Greatest economic mobility in US history."
+  },
+  { 
+    label: "Civil Rights Era", 
+    start: 1950, 
+    end: 1968, 
+    focus: "Majority", 
+    party: "Democratic-led", 
+    color: "#32CD32",
+    description: "Civil Rights Act (1964), Voting Rights Act (1965), Great Society programs. Medicare, Medicaid, anti-poverty initiatives."
+  },
+  { 
+    label: "Conservative Revolution", 
+    start: 1980, 
+    end: 2008, 
+    focus: "Elite", 
+    party: "Republican-led", 
+    color: "#FF8C00",
+    description: "Tax cuts for wealthy, deregulation, union decline. Top tax rate fell from 70% to 28%. Rising inequality resumed."
+  },
+  { 
+    label: "Obama Era", 
+    start: 2009, 
+    end: 2016, 
+    focus: "Mixed", 
+    party: "Democratic", 
+    color: "#FFD700",
+    description: "ACA expanded healthcare access. Financial crisis response favored banks. Elite influence through lobbying remained strong."
+  },
+  { 
+    label: "Recent Period", 
+    start: 2017, 
+    end: 2025, 
+    focus: "Mixed", 
+    party: "Mixed Leadership", 
+    color: "#FFD700",
+    description: "2017 Tax Cuts, COVID response, ongoing political polarization. Too recent for definitive historical assessment."
+  }
 ];
 
 // Prepare chart data
-const datasets = periods.map(p => ({
-  label: `${p.focus} (${p.party})`,
-  backgroundColor: p.color,
-  data: [{x: p.start, x2: p.end, y: p.label}],
-  party: p.party,
-  focus: p.focus
+const chartData = periods.map((p, index) => ({
+  x: p.start,
+  y: index,
+  x2: p.end,
+  period: p
 }));
 
 const config = {
-  type: 'bar',
-  data: { labels: periods.map(p => p.label), datasets },
+  type: 'scatter',
+  data: {
+    datasets: [{
+      label: 'US Governance Periods',
+      data: chartData,
+      backgroundColor: function(ctx) {
+        return ctx.raw.period.color;
+      },
+      borderColor: function(ctx) {
+        return ctx.raw.period.color;
+      },
+      pointRadius: 0,
+      showLine: false
+    }]
+  },
   options: {
-    indexAxis: 'y',
     responsive: true,
     plugins: {
       legend: { display: false },
       tooltip: {
         callbacks: {
+          title: function(context) {
+            const period = context[0].raw.period;
+            return `${period.label} (${period.start}-${period.end})`;
+          },
           label: function(context) {
-            return `${context.dataset.focus}: ${context.raw.x} – ${context.raw.x2}`;
+            const period = context.raw.period;
+            return [
+              `Governance Focus: ${period.focus}`,
+              `Controlling Party: ${period.party}`,
+              `Years: ${period.start}–${period.end}`
+            ];
           }
         }
       }
     },
     scales: {
-      x: { min: 1770, max: 2030, title: { display: true, text: 'Year' } },
-      y: { title: { display: true, text: 'Period' } }
+      x: { 
+        min: 1770, 
+        max: 2030, 
+        title: { display: true, text: 'Year' },
+        grid: { display: true },
+        ticks: {
+          stepSize: 25,
+          callback: function(value) {
+            return value.toString();
+          }
+        }
+      },
+      y: { 
+        type: 'linear',
+        min: -0.5,
+        max: periods.length - 0.5,
+        title: { display: true, text: 'Historical Period' },
+        ticks: {
+          callback: function(value, index) {
+            if (value >= 0 && value < periods.length && value % 1 === 0) {
+              return periods[value].label;
+            }
+            return '';
+          },
+          stepSize: 1
+        },
+        grid: { display: false }
+      }
     },
     onClick: (evt, elements) => {
-      if(elements.length > 0) {
-        const index = elements[0].datasetIndex;
-        const period = periods[index];
-        const infoBox = document.getElementById('infoBox');
-        infoBox.style.display = 'block';
-        infoBox.innerHTML = `<strong>${period.label}</strong><br>
-                             Governance: ${period.focus}<br>
-                             Controlling Party: ${period.party}<br>
-                             Years: ${period.start}–${period.end}`;
+      const points = config.data.datasets[0].data;
+      const rect = evt.chart.canvas.getBoundingClientRect();
+      const x = evt.clientX - rect.left;
+      const y = evt.clientY - rect.top;
+      
+      const canvasPos = Chart.helpers.getRelativePosition(evt, evt.chart);
+      const dataX = evt.chart.scales.x.getValueForPixel(canvasPos.x);
+      const dataY = Math.round(evt.chart.scales.y.getValueForPixel(canvasPos.y));
+      
+      // Check if click is within any period
+      for (let i = 0; i < periods.length; i++) {
+        const period = periods[i];
+        if (dataX >= period.start && dataX <= period.end && Math.abs(dataY - i) < 0.4) {
+          const infoBox = document.getElementById('infoBox');
+          infoBox.style.display = 'block';
+          infoBox.innerHTML = `
+            <strong>${period.label} (${period.start}–${period.end})</strong><br><br>
+            <strong>Governance Focus:</strong> ${period.focus}<br>
+            <strong>Controlling Party:</strong> ${period.party}<br><br>
+            <strong>Key Characteristics:</strong><br>
+            ${period.description}
+          `;
+          break;
+        }
       }
     }
-  }
+  },
+  plugins: [{
+    id: 'customDrawing',
+    afterDraw: function(chart) {
+      const ctx = chart.ctx;
+      const xScale = chart.scales.x;
+      const yScale = chart.scales.y;
+      
+      periods.forEach((period, index) => {
+        const startX = xScale.getPixelForValue(period.start);
+        const endX = xScale.getPixelForValue(period.end);
+        const y = yScale.getPixelForValue(index);
+        
+        // Draw period bar
+        ctx.fillStyle = period.color;
+        ctx.fillRect(startX, y - 15, endX - startX, 30);
+        
+        // Draw period label
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(period.label, (startX + endX) / 2, y + 4);
+      });
+    }
+  }]
 };
 
 new Chart(ctx, config);
